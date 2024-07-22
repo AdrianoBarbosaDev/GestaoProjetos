@@ -1,2 +1,0 @@
-INSERT INTO Usuario (nome,email,sexo,role,senha) VALUES ('admin','admin@gmail.com','feminino','ADMIN','senhaAdmin');
-INSERT INTO Usuario (nome,email,sexo,role,senha) VALUES ('user','user@gmail.com','feminino','USUARIO','senhaUser');
