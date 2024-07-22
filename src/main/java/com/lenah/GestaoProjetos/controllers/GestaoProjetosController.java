@@ -1,17 +1,22 @@
 package com.lenah.GestaoProjetos.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.lenah.GestaoProjetos.model.Usuario;
+import com.lenah.GestaoProjetos.model.UsuarioRole;
+import com.lenah.GestaoProjetos.repository.UsuarioRepository;
+import com.lenah.GestaoProjetos.services.UsuarioService;
 
 
 @RestController
 @RequestMapping("/controller")
 public class GestaoProjetosController {
 	
-	@GetMapping
-	public void teste() {
-		System.out.println("Teste funcional");
-	}
+	@Autowired
+	UsuarioRepository repo;
+
 	
 }
