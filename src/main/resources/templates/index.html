@@ -1,1 +1,25 @@
-<h1>oie</h1>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>GestaoProjetos</title>
+</head>
+<body>
+
+ <center><h1>Login de usuário:</h1>
+
+<form th:action="@{/auth/login}" method="post">
+	
+<label>Username:</label><br>
+<input type="text" id="login" autofocus="autofocus" name="login"><br>
+<label>Password:</label><br>
+<input type="password" id="senha" name="senha"><br>
+<button type="submit">Login</button>
+
+<br>
+<br>
+<a href="/recuperar">Recuperar Senha</a>
+
+</center>
+</body>
+</html>

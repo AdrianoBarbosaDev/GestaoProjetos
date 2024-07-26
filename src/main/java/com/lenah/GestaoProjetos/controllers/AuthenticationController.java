@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lenah.GestaoProjetos.model.AuthenticationDTO;
@@ -33,8 +34,8 @@ public class AuthenticationController {
 	private AuthenticationManager authenticationManager;
 	
 	@PostMapping("/login")
-	public ResponseEntity Login(@RequestBody AuthenticationDTO data) {
-		var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
+	public ResponseEntity Login(@RequestParam String login, @RequestParam String senha) {
+		var usernamePassword = new UsernamePasswordAuthenticationToken(login, senha);
 		var auth = this.authenticationManager.authenticate(usernamePassword);
 		
 		var token = tokenService.generateToken((Usuario) auth.getPrincipal());
@@ -49,7 +50,7 @@ public class AuthenticationController {
 		}
 		
 		String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
-		Usuario newUsuario = new Usuario(data.login(),encryptedPassword,data.role());
+		Usuario newUsuario = new Usuario(null,data.login(),encryptedPassword,data.role());
 		
 		this.usuarioRepository.save(newUsuario);
 		return ResponseEntity.ok().build();

@@ -21,8 +21,13 @@ import lombok.Data;
 @Entity
 public class Usuario implements UserDetails{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name= "id")
 	private Long id;
 	@Column(name = "login")
 	private String login;
@@ -30,12 +35,6 @@ public class Usuario implements UserDetails{
 	private String senha;
 	@Column(name = "role")
 	private UserRole role;
-
-	public Usuario(String login, String senha, UserRole role){
-		this.login = login;
-		this.senha = senha;
-		this.role = role;
-	}
 	
 	public Usuario() {}
 	
