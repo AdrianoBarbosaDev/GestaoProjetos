@@ -12,6 +12,10 @@ import com.lenah.GestaoProjetos.repository.UsuarioRepository;
 @Service
 public class UsuarioService implements UserDetails{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Autowired
 	UsuarioRepository repository;
 
