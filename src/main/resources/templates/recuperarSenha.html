@@ -9,26 +9,23 @@
 </head>
 <body>
 
- <center><h1>Login de usuário:</h1>
- 
- <div th:if="${msg}">
-	 <p th:text="${msg}"></p>
- </div>
+ <center><h1>Recuperação de senha:</h1>
 
-<form th:action="@{/auth/login}" method="post">
+<form th:action="@{/recuperarSenha}" method="post">
 	
-<label>Username:</label><br>
-<input type="text" id="login" autofocus="autofocus" name="login"><br>
-<label>Password:</label><br>
-<input type="password" id="senha" name="senha"><br>
+<label>Senha Nova:</label><br>
+<input type="password" id="senhaNova" name="senhaNova"><br>
+<label>Confirmar Senha:</label><br>
+<input type="password" id="confirmarSenha" name="confirmarSenha"><br>
 <br>
-<button type="submit">Login</button>
+<div th:if="${erro}">
+	<p class="text-danger" th:text="${erro}"></p>
+</div>
+<button type="submit">Definir Senha</button>
 
 <br>
 <br>
 </form>
-
-<a th:href="@{/recuperarSenha}">Recuperar Senha</a>
 
 </center>
 </body>
