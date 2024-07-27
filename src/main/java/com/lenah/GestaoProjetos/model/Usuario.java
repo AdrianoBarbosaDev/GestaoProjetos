@@ -25,15 +25,23 @@ public class Usuario implements UserDetails{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name= "id")
 	private Long id;
+	
 	@Column(name = "login")
 	private String login;
+	
 	@Column(name = "senha")
 	private String senha;
+	
+	@Column(name = "email")
+	private String email;
+	
 	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
 	private UserRole role;
 	
 	public Usuario() {}
@@ -48,6 +56,29 @@ public class Usuario implements UserDetails{
 	}
 
 
+	public Long getId() {
+		return id;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return login;
+	}
+	
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return senha;
+	}
+	
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -58,16 +89,7 @@ public class Usuario implements UserDetails{
 			return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 		}
 	}
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return senha;
-	}
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return login;
-	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
