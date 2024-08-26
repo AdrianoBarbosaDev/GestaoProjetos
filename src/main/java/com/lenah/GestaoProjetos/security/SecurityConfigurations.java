@@ -32,6 +32,8 @@ public class SecurityConfigurations {
 						.requestMatchers(HttpMethod.GET,"/").permitAll()
 						.requestMatchers(HttpMethod.GET,"/recuperarSenha").permitAll()
 						.requestMatchers(HttpMethod.POST,"/recuperarSenha").permitAll()
+						.requestMatchers(HttpMethod.GET,"/home").permitAll()
+						.requestMatchers(HttpMethod.POST,"/home").permitAll()
 						.requestMatchers(HttpMethod.GET, "/h2-console").permitAll()
 						.anyRequest().authenticated())
 				.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
