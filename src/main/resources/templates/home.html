@@ -8,27 +8,6 @@
 <title>GestaoProjetos</title>
 </head>
 <body>
-
- <center><h1>Recuperação de senha:</h1>
-
-<form th:action="@{/recuperarSenha}" method="post">
-	
-<label>Senha Nova:</label><br>
-<input type="password" id="senhaNova" name="senhaNova"><br>
-<label>Confirmar Senha:</label><br>
-<input type="password" id="confirmarSenha" name="confirmarSenha"><br>
-<br>
-<div th:if="${erro}">
-	<p class="text-danger" th:text="${erro}"></p>
-</div>
-<button type="submit">Definir Senha</button>
-
-<br>
-<br>
-</form>
-
-     <a th:href="@{/}">Voltar</a>
-
-</center>
+<h1>logado</h1>
 </body>
 </html>
