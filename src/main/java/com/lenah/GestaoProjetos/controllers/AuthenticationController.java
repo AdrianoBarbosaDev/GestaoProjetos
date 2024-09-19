@@ -7,14 +7,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lenah.GestaoProjetos.model.AuthenticationDTO;
 import com.lenah.GestaoProjetos.model.LoginResponseDTO;
@@ -40,23 +37,36 @@ public class AuthenticationController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestParam String login, @RequestParam String senha, RedirectAttributes redirectAttributes, Model model) {
-		var usernamePassword = new UsernamePasswordAuthenticationToken(login, senha);
-		var auth = this.authenticationManager.authenticate(usernamePassword);
+		try {
+			var usernamePassword = new UsernamePasswordAuthenticationToken(login, senha);
+			var auth = this.authenticationManager.authenticate(usernamePassword);
 
-		if (auth.isAuthenticated()) {
-			var token = tokenService.generateToken((Usuario) auth.getPrincipal());
-			redirectAttributes.addFlashAttribute("msg", "Login bem-sucedido");
+			if (auth.isAuthenticated()) {
+				var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+
+				HttpHeaders headers = new HttpHeaders();
+				headers.add("Location", "/home");
+
+				return new ResponseEntity<>(headers, HttpStatus.FOUND);
+			}
+		} catch (BadCredentialsException e) {
+			System.out.println("Credenciais incorretas");
+			/*redirectAttributes.addFlashAttribute("msg", "Credenciais inválidas");*/
+		/*	model.addAttribute("erro", "Credenciais inválidas.");*/
 
 			HttpHeaders headers = new HttpHeaders();
-			headers.add("Location", "/home");
+			headers.add("Location", "/?err");
 
 			return new ResponseEntity<>(headers, HttpStatus.FOUND);
-		} else {
-			model.addAttribute("erro", "Credenciais inválidas.");
-			return new ResponseEntity<>("redirect:/", HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			model.addAttribute("erro", "Ocorreu um erro ao tentar fazer login.");
+			return new ResponseEntity<>("redirect:/", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
+		return new ResponseEntity<>("redirect:/", HttpStatus.UNAUTHORIZED);
 	}
 
 

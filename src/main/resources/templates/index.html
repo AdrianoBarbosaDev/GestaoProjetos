@@ -10,6 +10,10 @@
 <body>
 
  <center><h1>Login de usuário:</h1>
+
+     <div th:if="${param.err}" class="alert alert-success">
+        Credenciais Incorretas
+     </div>
  
  <div th:if="${msg}">
 	 <p th:text="${msg}"></p>
