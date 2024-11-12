@@ -9,12 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lenah.GestaoProjetos.model.AuthenticationDTO;
 import com.lenah.GestaoProjetos.model.LoginResponseDTO;
@@ -25,9 +22,11 @@ import com.lenah.GestaoProjetos.security.TokenService;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
-@RestController
+@Controller
 @RequestMapping("/auth")
 public class AuthenticationController {
 	
@@ -41,23 +40,37 @@ public class AuthenticationController {
 	private AuthenticationManager authenticationManager;
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestParam String login, @RequestParam String senha, RedirectAttributes redirectAttributes, Model model) {
-		var usernamePassword = new UsernamePasswordAuthenticationToken(login, senha);
-		var auth = this.authenticationManager.authenticate(usernamePassword);
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> login(
+			@RequestParam String login,
+			@RequestParam String senha,
+			RedirectAttributes redirectAttributes) {
 
-		if (auth.isAuthenticated()) {
-			var token = tokenService.generateToken((Usuario) auth.getPrincipal());
-			redirectAttributes.addFlashAttribute("msg", "Login bem-sucedido");
+		Map<String, String> response = new HashMap<>();
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Location", "/home");
+		try {
+			var usernamePassword = new UsernamePasswordAuthenticationToken(login, senha);
+			var auth = this.authenticationManager.authenticate(usernamePassword);
 
-			return new ResponseEntity<>(headers, HttpStatus.FOUND);
-		} else {
-			model.addAttribute("erro", "Credenciais inválidas.");
-			return new ResponseEntity<>("redirect:/", HttpStatus.NOT_FOUND);
+			if (auth.isAuthenticated()) {
+				var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+				response.put("status", "success");
+				response.put("message", "Login bem-sucedido");
+				response.put("redirectUrl", "/home"); // URL de redirecionamento em caso de sucesso
+
+				return ResponseEntity.ok(response);
+			} else {
+				response.put("status", "error");
+				response.put("message", "Credenciais inválidas");
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+			}
+		} catch (Exception e) {
+			response.put("status", "error");
+			response.put("message", "Erro de autenticação");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 		}
 	}
+
 
 
 	@PostMapping("/register")
